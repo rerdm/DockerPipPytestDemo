@@ -2,25 +2,20 @@ pipeline {
     agent any
     
     stages {
-        stage('Build Docker Image') {
+        stage('Check Python Environment') {
             steps {
-                echo 'Building Docker image with pytest...'
-                bat 'docker build -t pytest-test .'
-            }
-        }
-        
-        stage('Test pytest availability') {
-            steps {
-                echo 'Testing if pytest is available in Docker container...'
-                bat 'docker run --rm pytest-test pytest --version'
+                echo 'Checking what is available on Jenkins server...'
+                bat 'python --version || echo "Python not found"'
+                bat 'python -m pytest --version || echo "pytest not available via -m"'
+                bat 'pytest --version || echo "pytest not found directly"'
+                bat 'pip list | findstr pytest || echo "pytest not in pip list"'
             }
         }
     }
     
     post {
         always {
-            echo 'Pipeline completed!'
-            bat 'docker rmi pytest-test || exit 0'
+            echo 'Environment check completed!'
         }
     }
 }
