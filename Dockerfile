@@ -4,8 +4,15 @@ FROM python:3.12-slim
 # Setze Arbeitsverzeichnis
 WORKDIR /app
 
-# Installiere nur pytest
-RUN pip install --upgrade pip && pip install pytest
+# Kopiere requirements.txt und installiere Dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# Installiere pytest zusätzlich (falls nicht in requirements.txt)
+RUN pip install pytest
+
+# Kopiere den gesamten Code ins Image
+COPY . .
 
 # Standard-Kommando
 CMD ["pytest", "--version"]
