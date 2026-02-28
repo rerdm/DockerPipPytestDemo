@@ -9,10 +9,10 @@ pipeline {
             }
         }
         
-        stage('Test pytest version') {
+        stage('Run Tests') {
             steps {
-                echo 'Running pytest --version in Docker container...'
-                bat 'docker run --rm python-pytest-test pytest --version'
+                echo 'Running pytest tests in Docker container...'
+                bat 'docker run --rm python-pytest-test pytest test_app.py -v'
             }
         }
     }
